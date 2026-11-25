@@ -1,19 +1,23 @@
 <?php
 
 use App\Core\View;
+use App\Model\Product;
 
-/** @var array<int, array{id: int, title: string, price: int|float}> $items */
+/** @var Product[] $items */
+/** @var array<int, string> $categoryNames */
 ?>
 <section class="page">
   <p class="eyebrow">Каталог</p>
   <h1>Товары</h1>
-  <p class="lead">Пока тестовый список. Полноценная модель появится в следующей работе.</p>
+  <p class="lead">Данные из products.json через ProductRepository → модели Product.</p>
 
   <div class="product-grid">
     <?php foreach ($items as $item): ?>
       <article class="product-card">
-        <h2><?= View::e($item['title']) ?></h2>
-        <p class="price"><?= View::e(number_format((float) $item['price'], 0, '.', ' ')) ?> ₽</p>
+        <h2><?= View::e($item->name()) ?></h2>
+        <p><?= View::e($categoryNames[$item->categoryId()] ?? 'Без категории') ?></p>
+        <p class="price"><?= View::e($item->formatPrice()) ?></p>
+        <p>Остаток: <?= View::e((string) $item->stock()) ?></p>
       </article>
     <?php endforeach; ?>
   </div>
