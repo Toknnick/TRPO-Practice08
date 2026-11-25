@@ -4,21 +4,23 @@ declare(strict_types=1);
 
 $root = dirname(__DIR__);
 
-require_once $root . '/src/Core/View.php';
-require_once $root . '/src/Core/Router.php';
-require_once $root . '/src/Controller/HomeController.php';
-require_once $root . '/src/Controller/CatalogController.php';
-require_once $root . '/src/Controller/ErrorController.php';
+require_once $root . '/src/autoload.php';
 
 use App\Controller\CatalogController;
 use App\Controller\ErrorController;
 use App\Controller\HomeController;
 use App\Core\Router;
+use App\Repository\ProductRepository;
+
+$productRepository = new ProductRepository(
+    $root . '/data/products.json',
+    $root . '/data/categories.json'
+);
 
 $router = Router::fromCsv($root . '/data/routes.csv');
 $router->setControllers([
     'HomeController' => new HomeController($root . '/data/pages.json'),
-    'CatalogController' => new CatalogController(),
+    'CatalogController' => new CatalogController($productRepository),
     'ErrorController' => new ErrorController(),
 ]);
 
